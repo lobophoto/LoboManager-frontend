@@ -1,9 +1,10 @@
 import React from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 import { connect } from 'dva'
 import _ from 'lodash';
 import { getUser } from '../utils/user';
 import FolderManager from './FolderManager';
+import request from 'superagent';
 const Search = Input.Search;
 
 const FormItem = Form.Item;
@@ -127,8 +128,26 @@ class Config extends React.Component{
             })
           }
         </div>
-        <Button type="primary">
-            更新
+        <Button type="primary" onClick={()=>{
+          request.get('/api/publish').then(d => {
+            message.success('发布成功');
+            this.componentDidMount();
+          }).catch(e => {
+            message.error('发布失败');
+          });
+        }}>
+            发布
+        </Button>
+        <br />
+        <Button type="danger" onClick={() => {
+          request.get('/api/reset').then(d => {
+            message.success('重置成功');
+            this.componentDidMount();
+          }).catch(e => {
+            message.error('发布失败');
+          });
+        }}>
+          重置
         </Button>
       </div>
     )
